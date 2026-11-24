@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F97316">
+  <title>Кампус Фуд — Еда в твоём кампусе</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TOP STICKY HEADER -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="#menu" class="brand" data-page="menu">
+        <div class="brand-logo" aria-hidden="true">🍔</div>
+        <div class="brand-text">
+          <span>Кампус Фуд</span>
+          <small>Еда в твоём кампусе</small>
+        </div>
+      </a>
+
+      <nav class="nav-tabs" aria-label="Основная навигация">
+        <button type="button" class="nav-tab active" data-page="menu">Меню</button>
+        <button type="button" class="nav-tab" data-page="cart">Корзина</button>
+        <button type="button" class="nav-tab" data-page="status">Мои заказы</button>
+      </nav>
+
+      <div class="search-box header-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input type="search" id="search-input" placeholder="Поиск блюд..." autocomplete="off">
+      </div>
+
+      <div class="topbar-actions">
+        <button type="button" class="wallet-pill" id="open-shab-info" title="Бонусный кошелёк студента">
+          <span class="icon-star">✦</span>
+          <span class="num"><strong id="header-shab-count">500</strong> баллов</span>
+        </button>
+
+        <button type="button" class="cart-btn" data-page="cart">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+            <path d="M3 6h18"></path>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Корзина · <strong id="head-count" class="num">0</strong></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE: MENU (ГЛАВНАЯ) -->
+  <main id="page-menu" class="page active">
+    <div class="container">
+
+      <!-- HERO BANNER -->
+      <section class="hero-card">
+        <div class="hero-content">
+          <div class="hero-meta">
+            <span class="eyebrow-pill">● СТОЛОВАЯ КОЛЛЕДЖА</span>
+          </div>
+          <h1>Вкусная пауза между парами.</h1>
+          <p>Выбирай любимые блюда — мы подготовим их к перемене</p>
+          <div class="hero-status-row">
+            <span class="status-pill"><span class="dot"></span> Кафе открыто</span>
+            <span class="work-hours">Пн–Пт · 8:00–17:00</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-food-stage">🥪</div>
+          <div class="hero-floating-tag">Твоя перемена. Твой вкус. ✨</div>
+        </div>
+      </section>
+
+      <!-- 2-COLUMN WORKSPACE: MENU LEFT + ORDER SIDEBAR RIGHT -->
+      <div class="workspace-grid">
+
+        <!-- LEFT COLUMN: CATALOG -->
+        <section class="catalog-column">
+          <div class="section-bar">
+            <div class="section-title-group">
+              <h2>Сегодня в меню</h2>
+              <span id="items-found" class="muted-count num">6 блюд</span>
+            </div>
+            <span class="fresh-note">🕒 Свежее каждый день</span>
+          </div>
+
+          <div class="toolbar">
+            <div class="category-list" role="tablist" aria-label="Категории блюд">
+              <button type="button" class="chip selected active" data-category="Все">Все</button>
+              <button type="button" class="chip" data-category="Выпечка">🥐 Выпечка</button>
+              <button type="button" class="chip" data-category="Горячее">🍲 Горячее</button>
+              <button type="button" class="chip" data-category="Напитки">🥤 Напитки</button>
+            </div>
+          </div>
+
+          <div id="products" class="product-grid"></div>
+        </section>
+
+        <!-- RIGHT COLUMN: SIDEBAR ORDER & WALLET -->
+        <aside class="order-sidebar" aria-label="Твой заказ">
+          <div class="card-panel sidebar-card">
+            <div class="sidebar-header">
+              <div class="sidebar-title">
+                <span>🛍️ Твой заказ</span>
+              </div>
+              <span id="sidebar-count" class="count-badge num">0 шт.</span>
+            </div>
+
+            <div id="sidebar-cart-items" class="sidebar-items"></div>
+
+            <div id="sidebar-cart-footer" style="display: none;">
+              <div class="sidebar-divider"></div>
+
+              <div class="sidebar-section-label">📍 Куда принести?</div>
+
+              <div class="field-group">
+                <label for="sidebar-building">Учебный корпус</label>
+                <select id="sidebar-building">
+                  <option value="Главный корпус">Главный корпус</option>
+                  <option value="Лабораторный корпус №2">Лабораторный корпус №2</option>
+                  <option value="Корпус ССУЗ-партнёра">Корпус ССУЗ-партнёра</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="sidebar-room">Номер аудитории</label>
+                <input type="text" id="sidebar-room" placeholder="Например, Ауд. 304">
+              </div>
+
+              <div class="field-group">
+                <label for="sidebar-delivery">Время готовности</label>
+                <select id="sidebar-delivery">
+                  <option value="К 10:15 — после 1 пары">К 10:15 — после 1 пары</option>
+                  <option value="К 12:00 — большая перемена" selected>К 12:00 — большая перемена</option>
+                  <option value="К 13:45 — после 3 пары">К 13:45 — после 3 пары</option>
+                </select>
+              </div>
+
+              <!-- DARK WALLET CARD -->
+              <div class="wallet-dark-card">
+                <div class="wd-top">
+                  <span>БОНУСНЫЙ БАЛАНС · <strong id="sidebar-shab-balance" class="num">500</strong> баллов</span>
+                </div>
+                <div class="wd-sub">Источник: Электронный студенческий</div>
+
+                <div class="wd-toggle-row">
+                  <span>Списать баллы (до 30%)</span>
+                  <label class="switch">
+                    <input type="checkbox" id="sidebar-shab-toggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="receipt sidebar-receipt">
+                <div class="receipt-row">
+                  <span>Блюда</span>
+                  <span id="sidebar-subtotal" class="num">0 ₽</span>
+                </div>
+                <div class="receipt-row discount">
+                  <span>Скидка баллами</span>
+                  <span id="sidebar-discount" class="num">−0 ₽</span>
+                </div>
+                <div class="receipt-divider"></div>
+                <div class="receipt-row total">
+                  <strong>Итого к оплате</strong>
+                  <strong id="sidebar-total" class="num">0 ₽</strong>
+                </div>
+              </div>
+
+              <button type="button" id="sidebar-pay-confirm" class="btn-primary full">Оплатить заказ</button>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- PAGE: CART -->
+  <section id="page-cart" class="page">
+    <div class="container narrow-container">
+      <div class="page-header">
+        <span class="eyebrow">ОФОРМЛЕНИЕ</span>
+        <h1>Корзина</h1>
+        <p>Проверьте состав заказа перед выбором способа получения.</p>
+      </div>
+      <div id="cart-content"></div>
+    </div>
+  </section>
+
+  <!-- PAGE: CHECKOUT (STEP 1 OF 2) -->
+  <section id="page-checkout" class="page">
+    <div class="container narrow-container">
+      <div class="page-header">
+        <span class="eyebrow">ШАГ 1 ИЗ 2</span>
+        <h1>Параметры получения</h1>
+        <p>Укажите корпус, аудиторию и удобное время к перемене.</p>
+      </div>
+
+      <div class="card-panel">
+        <div class="field-group">
+          <label for="building">Учебный корпус</label>
+          <select id="building">
+            <option value="Главный корпус">Главный корпус</option>
+            <option value="Лабораторный корпус №2">Лабораторный корпус №2</option>
+            <option value="Корпус ССУЗ-партнёра">Корпус ССУЗ-партнёра</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="room">Аудитория или точка выдачи</label>
+          <input type="text" id="room" placeholder="Например, Ауд. 304 или стойка самовывоза">
+        </div>
+
+        <div class="field-group">
+          <label for="delivery">Время готовности</label>
+          <select id="delivery">
+            <option value="К 10:15 — после 1 пары">К 10:15 — после 1 пары</option>
+            <option value="К 12:00 — большая перемена" selected>К 12:00 — большая перемена</option>
+            <option value="К 13:45 — после 3 пары">К 13:45 — после 3 пары</option>
+          </select>
+        </div>
+
+        <div class="info-banner">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+          <span>На следующем шаге вы сможете списать бонусные баллы (до 30% стоимости заказа).</span>
+        </div>
+
+        <div class="actions-stack">
+          <button type="button" id="to-payment" class="btn-primary full">Перейти к оплате</button>
+          <button type="button" class="btn-ghost full" data-page="cart">Вернуться в корзину</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE: PAYMENT (STEP 2 OF 2) -->
+  <section id="page-payment" class="page">
+    <div class="container narrow-container">
+      <div class="page-header">
+        <span class="eyebrow">ШАГ 2 ИЗ 2</span>
+        <h1>Оплата заказа</h1>
+        <p>Единый студенческий кошелёк и банковская карта.</p>
+      </div>
+
+      <div class="card-panel wallet-toggle-card">
+        <div class="wt-header">
+          <div>
+            <div class="wt-title">
+              <span>Списать баллы</span>
+              <span class="tag-discount">до 30%</span>
+            </div>
+            <p class="wt-sub">Доступный баланс: <strong id="shab-balance" class="num">500</strong> баллов (макс. <span id="max-shab-pay" class="num">0</span>)</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="use-shab-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div id="shab-calc-note" class="wt-calc">Списание баллов отключено — оплата 100% картой</div>
+      </div>
+
+      <div class="card-panel">
+        <div class="receipt">
+          <div class="receipt-row">
+            <span>Стоимость блюд</span>
+            <span id="payment-subtotal" class="num">0 ₽</span>
+          </div>
+          <div id="receipt-discount-row" class="receipt-row discount">
+            <span>Оплата баллами (до <span id="shab-discount-rub" class="num">0</span> ₽)</span>
+            <span id="receipt-discount" class="num">−0 ₽</span>
+          </div>
+          <div class="receipt-divider"></div>
+          <div class="receipt-row total">
+            <strong>К оплате картой</strong>
+            <strong id="payment-total" class="num">0 ₽</strong>
+          </div>
+        </div>
+
+        <div class="actions-stack">
+          <button type="button" id="pay-confirm" class="btn-primary full">Оплатить <span id="btn-pay-amount" class="num">0 ₽</span></button>
+          <button type="button" class="btn-ghost full" data-page="checkout">Изменить адрес доставки</button>
+        </div>
+
+        <p class="legal-note">При отмене заказа списанные баллы автоматически возвращаются на баланс.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE: STATUS & ORDERS -->
+  <section id="page-status" class="page">
+    <div class="container narrow-container">
+      <div class="status-hero">
+        <div class="check-circle" aria-hidden="true">✓</div>
+        <span class="eyebrow">ЗАКАЗ № <span id="order-number" class="num">101</span></span>
+        <h1>Статус выполнения заказа</h1>
+        <p id="order-description">Активных заказов в локальной базе пока нет. Оформите заказ из меню.</p>
+      </div>
+
+      <div class="card-panel">
+        <ul class="timeline horizontal-timeline">
+          <li class="step active">
+            <span class="step-marker"></span>
+            <div class="step-body">
+              <b>✓ Принят</b>
+              <small>Оплата подтверждена, чек сформирован</small>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-marker"></span>
+            <div class="step-body">
+              <b>◷ Готовится</b>
+              <small>Сотрудник кафе собирает ваш заказ</small>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-marker"></span>
+            <div class="step-body">
+              <b>○ Курьер в пути</b>
+              <small>Направляется в указанную аудиторию</small>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-marker"></span>
+            <div class="step-body">
+              <b>○ Доставлен</b>
+              <small>Приятного аппетита!</small>
+            </div>
+          </li>
+        </ul>
+
+        <button type="button" id="new-order" class="btn-primary full">Вернуться в меню</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOATING CART BAR (MOBILE/TABLET) -->
+  <div id="floating-cart" class="floating-cart" data-page="cart" style="display: none;">
+    <div class="fc-left">
+      <span id="fc-count" class="fc-badge num">0</span>
+      <span>Открыть корзину</span>
+    </div>
+    <div class="fc-right">
+      <span id="fc-total" class="num">0 ₽</span>
+      <span>→</span>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV (MOBILE) -->
+  <nav class="bottom-nav" aria-label="Мобильная навигация">
+    <button type="button" class="nav-item active" data-page="menu">
+      <span>🍽️</span>
+      <span>Меню</span>
+    </button>
+    <button type="button" class="nav-item" data-page="cart">
+      <span class="nav-icon-wrap">
+        <span>🛍️</span>
+        <span id="nav-dot"></span>
+      </span>
+      <span>Корзина</span>
+    </button>
+    <button type="button" class="nav-item" data-page="status">
+      <span>📋</span>
+      <span>Заказы</span>
+    </button>
+  </nav>
+
+  <!-- WALLET INFO MODAL -->
+  <div id="shab-modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow">ПРОГРАММА ЛОЯЛЬНОСТИ</span>
+          <h3 id="modal-title">Как работают студенческие баллы</h3>
+        </div>
+        <button type="button" id="close-shab-modal" class="modal-close" aria-label="Закрыть">✕</button>
+      </div>
+      <p class="modal-desc">Единые бонусные баллы колледжа. Начисляются за подтверждённую активность в сервисах платформы (до 60 баллов в неделю).</p>
+      <div class="rules-list">
+        <div class="rule-row"><span>Задачник</span><b>+2 балла (до 10/нед.)</b></div>
+        <div class="rule-row"><span>Бронь Кабинки (отмена за 2 ч)</span><b>+2 балла (до 4/нед.)</b></div>
+        <div class="rule-row"><span>Хакатон Хаб</span><b>+10 баллов (до 20/нед.)</b></div>
+        <div class="rule-row"><span>ИТ.Спорт (тренировка)</span><b>+8 баллов (до 24/нед.)</b></div>
+        <div class="rule-row"><span>Медиацентр (отзыв)</span><b>+3 балла (до 6/нед.)</b></div>
+      </div>
+      <p class="legal-note">В «Кампус Фуд» баллами можно оплатить до 30% суммы заказа.</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
